@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<title>Making Vector Maps with R</title>
+
+<head>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/shCore.css" />
+  <link rel="stylesheet" type="text/css" href="/css/shThemeDefault.css" />
+
+  <script type="text/javascript" src="/js/shCore.js"></script>
+  <script type="text/javascript" src="/js/shBrushPython.js"></script>
+  <script type="text/javascript" src="/js/shBrushJScript.js"></script>
+
+<style>
+</style>
+
+
+</head>
+
+<body>
+
+<!-- Title -->
+<div class="w3-bar w3-theme w3-xlarge">
+  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-bars"></i></a>
+  <a href="#" class="w3-bar-item w3-button">Maps</a>
+  <a href="/" class="w3-bar-item w3-button w3-right"><i class="fa fa-home"></i></a>
+</div>
+
+<!--Content -->
+<div class="w3-container w3-white">
+
+<h1>Making Vector Maps with R</h1>
+
+<p>
+In this tutorial we will show Whole Foods store locations on the vector map of Massachusetts.
+The final map will look like this:
+</p>
+
+<img src="img/ma-wfs.png" width="50%">
+
+<h2>Data</h2>
+
+<p>
+We will need two pieces of data:
+</p>
+
+<ul>
+<li>Geographic data to draw the map of Massachusetts.</li>
+<li>Geographic coordinates of Whole Foods stores.</li>
+</ul>
+
+<h3>Cartographic Boundary Shapefiles</h3>
+
+<p>
+The shapefile format is a popular geospatial vector data format for geographic information systems (GIS).
+It is developed and regulated by Esri (Environmental Systems Research Institute).
+</p>
+
+<p>
+You can download free shapefiles from <a href="https://www.census.gov/">census.gov</a> web site. 
+I chose the national county file <a href="http://www2.census.gov/geo/tiger/GENZ2017/shp/cb_2017_us_county_5m.zip">cb_2017_us_county_5m.zip</a>
+containing state and county data. The zip file contains multiple files. Extract them in some directory, such as, <i>/data/cb_2017_us_county_5m/</i>.
+</p>
+
+<h3>Whole Foods Stores</h3>
+
+<p>
+You can get store addresses at <a href="https://www.wholefoodsmarket.com/stores/list/state">Whole Foods</a> web site.
+Then you can lookup geo coordinates (latitude and longitude) by address. There are multiple free web sites where you can do that.
+I stored data in a CSV file with 3 columns: Address, Latitude, and Longitude.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+Address,Latitude,Longitude
+"15 Westland Ave Boston, MA 02115",42.343826,-71.087316
+"331 Paradise Rd Swampscott, MA 01907",42.479213,-70.904801
+"916 Walnut St Newton, MA 02461",42.330066,-71.206397
+...
+]]></script>
+
+<h2>The Map of Massachusetts</h2>
+
+<p>
+We are ready to create a map. We will need following libraries.
+Make sure that they are properly installed on your system.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+library(sf)
+library(tmap)
+]]></script>
+
+<p>
+Next, we will load national county shapefile, extract Massachusetts data and draw the map.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+sf_us = st_read("/data/cb_2017_us_county_5m")
+sf_ma = sf_us[sf_us$STATEFP=="25",]
+qtm(sf_ma)
+]]></script>
+
+<p>
+The map should look like this:
+</p>
+
+<img src="img/ma.png" width="50%">
+
+<p>
+We used sf library to load national county shapefile from <i>/data/cb_2017_us_county_5m/</i> folder into <i>sf_us</i> variable.
+The structure of <i>sf_us</i> variable is similar to a conventional data frame. It contains data for all states.
+</p>
+
+<p>
+The state information is stored in STATEFP column as a <a href="https://www.census.gov/geo/reference/ansi_statetables.html">FIPS code</a>.
+The FIPS code for Massachusetts is 25. Extracting geodata for Massachusetts is similar to subsetting any other type of data in R.
+</p>
+
+<p>
+Finally we used qtm() API from tmap library to create the map.
+</p>
+
+
+<h2>Adding Store Locations</h2>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+wfs = read.csv("/data/WholeFoods-MA.csv")
+sf_wfs = st_as_sf(wfs, coords = c("Longitude", "Latitude"))
+qtm(sf_ma) + qtm(sf_wfs, symbols.col="red")
+]]></script>
+
+
+</div>
+
+<!-- Do syntax highlighting -->
+<script>
+SyntaxHighlighter.defaults['toolbar'] = false;
+SyntaxHighlighter.all()
+</script>
+
+</body>
+
+</html>
+
+
