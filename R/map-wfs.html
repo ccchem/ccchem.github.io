@@ -3,30 +3,28 @@
 <title>Making Vector Maps with R</title>
 
 <head>
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
 
-  <link rel="stylesheet" type="text/css" href="/css/shCore.css" />
-  <link rel="stylesheet" type="text/css" href="/css/shThemeDefault.css" />
+  <link rel="stylesheet" href="/css/w3.css">
+  <link rel="stylesheet" href="/css/w3-theme-teal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/my.css">
+
+  <link rel="stylesheet" href="/css/shCore.css" />
+  <link rel="stylesheet" href="/css/shThemeDefault.css" />
 
   <script type="text/javascript" src="/js/shCore.js"></script>
   <script type="text/javascript" src="/js/shBrushPython.js"></script>
   <script type="text/javascript" src="/js/shBrushJScript.js"></script>
-
-<style>
-</style>
-
-
 </head>
 
 <body>
 
 <!-- Title -->
 <div class="w3-bar w3-theme w3-xlarge">
-  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-bars"></i></a>
-  <a href="#" class="w3-bar-item w3-button">Maps</a>
-  <a href="/" class="w3-bar-item w3-button w3-right"><i class="fa fa-home"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hover-none my-hover-text"><i class="fa fa-bars"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hover-none my-hover-text">Maps</a>
+  <a href="/" class="w3-bar-item w3-button w3-hover-none my-hover-text w3-right"><i class="fa fa-home"></i></a>
 </div>
 
 <!--Content -->
@@ -126,19 +124,30 @@ Finally we used qtm() API from tmap library to create the map.
 
 <h2>Adding Store Locations</h2>
 
+<p>
+First, read the CSV file with Whole Foods geo coordinates into a dataframe variable <i>wfs</i>.
+To be able to draw store locations, we have to create sf object <i>sf_wfs</i> from <i>wfs</i> data frame.
+Finally, draw two layers with two qtm() functions, the map and red dots.
+</p>
+
 <script type="syntaxhighlighter" class="brush: py"><![CDATA[
 wfs = read.csv("/data/WholeFoods-MA.csv")
 sf_wfs = st_as_sf(wfs, coords = c("Longitude", "Latitude"))
 qtm(sf_ma) + qtm(sf_wfs, symbols.col="red")
 ]]></script>
 
+<p>
+The final map looks like this:
+</p>
+
+<img src="img/ma-wfs.png" width="50%">
 
 </div>
 
-<!-- Do syntax highlighting -->
+<!-- Syntax highlighting -->
 <script>
-SyntaxHighlighter.defaults['toolbar'] = false;
-SyntaxHighlighter.all()
+  SyntaxHighlighter.defaults['toolbar'] = false;
+  SyntaxHighlighter.all()
 </script>
 
 </body>
