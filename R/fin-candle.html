@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<title>Candlestick Charts with R</title>
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="/css/w3.css">
+  <link rel="stylesheet" href="/css/w3-theme-teal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/my.css">
+
+  <link rel="stylesheet" href="/css/shCore.css" />
+  <link rel="stylesheet" href="/css/shThemeDefault.css" />
+
+  <script type="text/javascript" src="/js/shCore.js"></script>
+  <script type="text/javascript" src="/js/shBrushPython.js"></script>
+  <script type="text/javascript" src="/js/shBrushJScript.js"></script>
+</head>
+
+<body>
+
+<!-- Title -->
+<div class="w3-bar w3-theme w3-xlarge">
+  <a href="#" class="w3-bar-item w3-button w3-hover-none my-hover-text"><i class="fa fa-bars"></i></a>
+  <span class="w3-bar-item">Finance</span>
+  <a href="/" class="w3-bar-item w3-button w3-hover-none my-hover-text w3-right"><i class="fa fa-home"></i></a>
+</div>
+
+<!--Content -->
+<div class="w3-container w3-white">
+
+<h1>Candlestick Charts with R</h1>
+
+<p>
+In this tutorial we will create some financial charts. It will be a candlestick chart of SPDR S&amp;P 500 ETF. 
+We will also add few techincal indicators, Bollinger Bands and RSI. The chart will look like this:
+</p>
+
+<img src="img/fin-candle.png" width="70%">
+
+<p>
+We will use <i>quantmod</i> library to read historical prices from Yahoo Finance and to draw charts,
+so make sure the library is installed on your system.
+</p>
+
+<p>
+First, let us read year to date prices of SPDR S&amp;P 500 ETF from Yahoo Finance.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+library(quantmod)
+spy = getSymbols("SPY", from="2018-01-01", env=NULL)
+]]></script>
+
+<p>
+Next, we will draw the candlestick chart of SPY and add two technical indicators, Bollinger Bands and RSI.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+chartSeries(spy, theme='white', TA="addRSI();addBBands()", 
+  subset="2018-03/2018-07", major.ticks='months', name="SPY")
+]]></script>
+
+
+</div>
+
+<!-- Syntax highlighting -->
+<script>
+  SyntaxHighlighter.defaults['toolbar'] = false;
+  SyntaxHighlighter.all()
+</script>
+
+</body>
+
+</html>
+
