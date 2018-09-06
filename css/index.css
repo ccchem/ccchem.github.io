@@ -1,8 +1,16 @@
 body { 
-  background-color: #eeeeee; 
-  padding: 0;
-  margin: 0;
+  background-color: #ddd; 
 }
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  color: #555;
+}
+
 
 .col-container {
   display: flex;
@@ -16,6 +24,7 @@ body {
 }
 
 .card {
+  width: 100%;
   padding: 10px;
   margin: 7px 5px;
   background-color: #fff;
@@ -23,12 +32,16 @@ body {
   border-radius: 2px;
 }
 
-@media only screen and (max-width: 600px) {
-    .col {
-        display: block;
-        width: 100%;
-    }
+@media screen and (max-width: 600px) {
+  .col {
+    width: 100%;
+  }
 }
 
+@media screen and (min-width: 601px) and (max-width: 900px) {
+  .col {
+    width: 50%;
+  }
+}
 
 
