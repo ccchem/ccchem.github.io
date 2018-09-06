@@ -1,4 +1,58 @@
 .syntaxhighlighter table td.code .container { padding-bottom: 2px !important; }
 
-.my-hover-text:hover { color:#c2d6d6!important }
+html, body {
+  font-family: Verdana, sans-serif;
+  font-size: 15px; 
+  line-height: 1.5
+}
+
+h1 {
+  font-size:36px;
+}
+
+h2 {
+  font-size:30px;
+}
+
+h3 {
+  font-size:24px;
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight:400; 
+  margin:10px 0
+}
+
+
+.my-bar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #009688;
+  font-size: 24px;
+}
+
+.my-left {
+  float: left;
+}
+
+.my-bar-item {
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+a.my-bar-item:hover {
+  color:#c2d6d6;
+}
+
+.my-right {
+  float: right;
+}
+
 
