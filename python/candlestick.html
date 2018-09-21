@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<title>Python: Candlestick Charts with Python</title>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/my.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/shCore.css" />
+  <link rel="stylesheet" type="text/css" href="/css/shThemeDefault.css" />
+
+  <script type="text/javascript" src="/js/shCore.js"></script>
+  <script type="text/javascript" src="/js/shBrushPython.js"></script>
+  <script type="text/javascript" src="/js/shBrushJScript.js"></script>
+
+<style>
+</style>
+
+
+</head>
+
+<body>
+
+<!-- Title -->
+<div>
+<ul class="my-bar">
+  <li class="my-left"><span class="my-bar-item">Demo: Finance</span></li>
+  <li class="my-right"><a href="/" class="my-bar-item"><i class="fa fa-home"/></i></a></li>
+</ul>
+</div>
+
+
+<!--Content -->
+<div class="my-content">
+
+<h1>Candlestick Chart</h1>
+
+<p>
+In this tutorial we will create some financial charts. It will be a candlestick chart of SPDR S&amp;P 500 ETF.
+The chart will look like this:
+</p>
+
+<img src="img/candle.png" width="50%">
+
+
+<h2>Data</h2>
+
+<p>
+To create a chart, we need some data. You can get market data from different sources. 
+I downloaded two months of historical SPY data from Yahoo Finance and saved it in a file.
+The file is in CSV format and looks like this:
+</p>
+
+<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+Date,Open,High,Low,Close,Adj Close,Volume
+2018-06-01,272.410004,273.940002,272.329987,273.600006,272.376923,68905300
+2018-06-04,274.529999,275.190002,274.260010,274.899994,273.671112,44165500
+2018-06-05,275.049988,275.529999,274.179993,275.100006,273.870239,51135000
+2018-06-06,275.790009,277.519989,275.089996,277.399994,276.159943,62732200
+...
+]]></script>
+
+<p>
+We will use Pandas library to read CSV file into a DataFrame object.
+DataFrame is a 2-dimensional labeled data structure with columns of potentially different types. 
+You can think of it like a spreadsheet or SQL table. 
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+import pandas as pd
+
+qq = pd.read_csv('/data/SPY-2m.csv', parse_dates=['Date'])
+
+lst_open = qq['Open']
+lst_high = qq['High']
+lst_low = qq['Low']
+lst_close = qq['Close']
+]]></script>
+
+
+<h2>Chart</h2>
+
+<p>
+We will use Matplotlib library for charting. At some point matplotlib.finance module provided
+API for drawing candlestick charts. That module was deprecated and eventually renamed to mpl_finance.
+I never liked the implementation in mpl_finance module, so I created my own.
+</p>
+
+<p>
+The following code draws the chart. All candlestick drawing is in a separate function, plot_candlesticks().
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+import matplotlib.pyplot as plt
+
+ax = plt.axes()
+
+# Customize grid color and line style
+ax.grid(which="major", color='#dddddd', linestyle='dashed')
+# Place the grid behind the chart / adjust grid z-order
+ax.set_axisbelow(True)
+
+# Plot candlestick chart
+plot_candlesticks(ax, lst_open, lst_high, lst_low, lst_close)
+
+ax.autoscale_view()
+
+plt.title('SPY - SPDR S&P 500 ETF', loc='left')
+plt.show()
+]]></script>
+
+
+<p>
+The following function draws the chart.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+import matplotlib.lines as mpl
+import matplotlib.patches as mpp
+
+def plot_candlesticks(axes, lst_open, lst_high, lst_low, lst_close):
+  lcolorup='k'     # Line color Up move
+  bcolorup='w'     # Bar color Up move
+
+  lcolordown='r'   # Line color Down move
+  bcolordown='r'   # Bar color Down move
+
+  width = 0.6      # Bar width
+  offset = width / 2.0
+
+  # Iterate over all prices
+  for i in range(len(lst_close)):
+    q_open = lst_open[i]
+    q_high = lst_high[i]
+    q_low = lst_low[i]
+    q_close = lst_close[i]
+
+    # Up move
+    if q_close >= q_open:
+      lcolor = lcolorup
+      bcolor = bcolorup
+
+      lower = q_open
+      height = q_close - q_open
+    # Down move
+    else:
+      lcolor = lcolordown
+      bcolor = bcolordown
+
+      lower = q_close
+      height = q_open - q_close
+
+    # Candlestick line
+    line = mpl.Line2D(xdata=(i, i), ydata=(q_low, q_high), 
+        color=lcolor, linewidth=1.7, antialiased=True)
+
+    # Candlestick bar
+    rect = mpp.Rectangle(xy=(i - offset, lower), width=width, height=height, 
+        facecolor=bcolor, edgecolor=lcolor, linewidth=1.7, zorder=10)
+
+    ax.add_line(line)
+    ax.add_patch(rect)
+]]></script>
+
+
+<p>
+The chart should look like this.
+</p>
+
+<img src="img/candle-2.png" width="50%">
+
+<h2>Date Label Customization</h2>
+
+<p>
+Now, let's customize display of x-axis labels. Insert the following code before plt.show().
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+...
+
+months = mdates.MonthLocator()
+ax.xaxis.set_major_locator(months)
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%y'))
+
+plt.show()
+]]></script>
+
+<p>
+Now the chart looks like this.
+</p>
+
+<img src="img/stock_chart_1.png" width="50%">
+
+
+</div>
+
+<!-- Do syntax highlighting -->
+<script>
+SyntaxHighlighter.defaults['toolbar'] = false;
+SyntaxHighlighter.all()
+</script>
+
+</body>
+
+</html>
+
