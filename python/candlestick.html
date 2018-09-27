@@ -175,24 +175,40 @@ The chart should look like this.
 <h2>Date Label Customization</h2>
 
 <p>
-Now, let's customize display of x-axis labels. Insert the following code before plt.show().
+As you can see, x-axis displays indices.
+To show dates we have to implement custom formatter shown below
 </p>
 
 <script type="syntaxhighlighter" class="brush: py"><![CDATA[
-...
+import matplotlib.ticker as mpt
 
-months = mdates.MonthLocator()
-ax.xaxis.set_major_locator(months)
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%y'))
+class MyFormatter(mpt.Formatter):
+    def __init__(self, labels):
+        self.labels = labels
+        self.n = len(labels)
 
-plt.show()
+    def __call__(self, x, pos=None):
+        i = int(x + 0.5)
+        if i < 0 or i >= self.n:
+            return ''
+        else:
+            return self.labels[i].strftime("%b-%d")
+]]></script>
+
+<p>
+and then call the following API to set our custom formatter.
+</p>
+
+<script type="syntaxhighlighter" class="brush: py"><![CDATA[
+fmt = MyFormatter(qq.Date)
+ax.xaxis.set_major_formatter(fmt)
 ]]></script>
 
 <p>
 Now the chart looks like this.
 </p>
 
-<img src="img/stock_chart_1.png" width="50%">
+<img src="img/candle.png" width="50%">
 
 
 </div>
