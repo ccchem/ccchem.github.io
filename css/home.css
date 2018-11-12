@@ -1,0 +1,51 @@
+body {
+  background-color: #ddd;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  color: #555;
+}
+
+
+.col-container {
+  margin: 5px;
+  display: flex;
+  flex-flow: row wrap;
+/*  justify-content: center; */
+}
+
+.col {
+  width: 50%;
+  display: flex;
+}
+
+.card {
+  width: 100%;
+  padding: 10px;
+  margin: 5px;
+  background-color: #fff;
+  /*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 600px) {
+  .col {
+    width: 100%;
+  }
+}
+
+/*
+@media screen and (min-width: 601px) and (max-width: 900px) {
+  .col {
+    width: 50%;
+  }
+}
+*/
+
+
