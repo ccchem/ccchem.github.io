@@ -57,7 +57,7 @@ Let's explore "general matrix multiplication" (gemm) API.
 </p>
 
 
-<h2>Gemm</h2>
+<h2>GEMM</h2>
 
 <p>
 The "gemm" operation is defined as
@@ -80,7 +80,7 @@ Where
 </ul>
 
 <p>
-C API, also called "cblas", defines this operation as follows.
+C API, also called "CBLAS", defines this operation as follows.
 </p>
 
 <script type="syntaxhighlighter" class="brush: cpp"><![CDATA[
@@ -101,8 +101,33 @@ void cblas_sgemm(
 Note that there are few versions of this function, such as "sgemm" (single-precision),
 "dgemm" (double-precision), "cgemm" (single-precision complex), and
 "zgemm" (double-precision complex). 
-
 </p>
+
+
+<h2>Memory Layout</h2>
+<p>
+As you can see from <i>cblas_sgemm()</i> method signature, matrices are passed 
+as float pointers. A pointer is just an address of a linear memory buffer.
+There are two methods for storing multi dimensional data in a linear storage -
+row-major or column-major.
+</p>
+
+<img src="img/blas-layout.png" width="50%">
+
+<p>
+In a column-major order, the consecutive elements of a column reside next to 
+each other, whereas in a row-major order, the consecutive elements of a row reside next to each other.
+</p>
+
+<p>
+First parameter in <i>cblas_sgemm()</i> specifies row-major or column-major order.
+Not all BLAS implementations let you choose memory layout for matrices. 
+Original Fortran implementation or cuBLAS from Nvidia are column-major only.
+</p>
+
+<h2>CBLAS Example</h2>
+
+<img src="img/blas-mult1.png" width="70%">
 
 
 </div>
